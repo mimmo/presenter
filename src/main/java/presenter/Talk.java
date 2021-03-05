@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Talk {
-	private List<String> _partecipants;
+	private List<String> _participants;
 	private List<String> _absents;
 	private Function<List<String>, String> _selectStrategy;
 
@@ -15,7 +15,7 @@ public class Talk {
 	}
 
 	public Talk(List<String> partecipants, List<String> absents, Function<List<String>, String> selectStrategy) {
-		_partecipants = partecipants;
+		_participants = partecipants.stream().collect(Collectors.toList());
 		_absents = absents;
 		_selectStrategy = selectStrategy;
 	}
@@ -24,11 +24,15 @@ public class Talk {
 		return _selectStrategy.apply(getParticipants());
 	}
 
-	private List<String> getParticipants() {
-		return _partecipants
+	public List<String> getParticipants() {
+		return _participants
 			.stream()
 			.filter(p -> !_absents.contains(p))
 			.collect(Collectors.toList());
+	}
+
+	public void addPerson(String name) {
+		_participants.add(name);
 	}
 
 
