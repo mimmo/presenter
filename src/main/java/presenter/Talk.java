@@ -1,9 +1,11 @@
 package presenter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Talk {
 	private List<String> _participants;
@@ -15,7 +17,7 @@ public class Talk {
 	}
 
 	public Talk(List<String> partecipants, List<String> absents, Function<List<String>, String> selectStrategy) {
-		_participants = partecipants.stream().collect(Collectors.toList());
+		_participants = new ArrayList<>(partecipants);
 		_absents = absents;
 		_selectStrategy = selectStrategy;
 	}
@@ -24,16 +26,19 @@ public class Talk {
 		return _selectStrategy.apply(getParticipants());
 	}
 
-	public List<String> getParticipants() {
+	private List<String> getParticipants() {
 		return _participants
 			.stream()
 			.filter(p -> !_absents.contains(p))
 			.collect(Collectors.toList());
 	}
 
-	public void addPerson(String name) {
+	public void addParticipant(String name) {
 		_participants.add(name);
 	}
 
+	public void addParticipants(String ... values) {
+		Stream.of(values).forEach(p -> addParticipant(p));
+	}
 
 }
